@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,11 +40,13 @@ public class CancionController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<?> guardarCancion(@RequestBody Cancion cancion){
 		return new ResponseEntity<>(cancionService.save(cancion), HttpStatus.CREATED);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> borrarCancion(@PathVariable int id){
 		Cancion cancion = cancionService.findById(id);
